@@ -90,8 +90,31 @@ fn install_android_deps() {
     println!("cargo:rustc-link-lib=OpenSLES");
 }
 
+fn emit_qnap_build_env() {
+    let build_epoch = std::env::var("QNAP_BUILD_EPOCH")
+        .ok()
+        .filter(|v| !v.trim().is_empty())
+        .unwrap_or_else(|| {
+            std::time::SystemTime::now()
+                .duration_since(std::time::UNIX_EPOCH)
+                .map(|d| d.as_secs().to_string())
+                .unwrap_or_else(|_| "0".to_owned())
+        });
+    println!("cargo:rustc-env=QNAP_BUILD_EPOCH={}", build_epoch);
+    println!("cargo:rerun-if-env-changed=QNAP_BUILD_EPOCH");
+    if let Ok(url) = std::env::var("QNAP_UPDATE_MANIFEST_URL") {
+        println!("cargo:rustc-env=QNAP_UPDATE_MANIFEST_URL={}", url.trim());
+    }
+    println!("cargo:rerun-if-env-changed=QNAP_UPDATE_MANIFEST_URL");
+    if let Ok(days) = std::env::var("QNAP_EXPIRE_DAYS") {
+        println!("cargo:rustc-env=QNAP_EXPIRE_DAYS={}", days.trim());
+    }
+    println!("cargo:rerun-if-env-changed=QNAP_EXPIRE_DAYS");
+}
+
 fn main() {
     hbb_common::gen_version();
+    emit_qnap_build_env();
     install_android_deps();
     #[cfg(all(windows, feature = "inline"))]
     build_manifest();

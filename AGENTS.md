@@ -1,3 +1,10 @@
+<!-- QNAP 定制项目索引（以下为最小化追加，正文保持与上游一致以减少同步冲突） -->
+> **QNAP RustDesk 定制分支说明（`qnap-main`）**：
+> - `master` 分支永远保持与官方上游 `upstream/master` 同步纯净，所有定制均在 `qnap-main` 分支进行。
+> - **文档地图**：产品定位与规则见 `PRODUCT.md`；打包/Secrets/macOS 指引见 `OPERATIONS.md`；变更记录见 `CHANGELOG.md`；未完成事项见 `TODO.md`；环境变量模板见 `.env.example`；版本清单模板见 `docs/qnap-update-manifest.example.json`。
+> - **定制代码入口**：品牌图标生成脚本 `scripts/qnap_brand.py`；6 个月强制更新后端 `src/qnap_update.rs`；强制更新前端弹窗 `flutter/lib/desktop/widgets/qnap_force_update_dialog.dart`；独立打包工作流 `.github/workflows/qnap-build.yml`。
+> - 免除文档：复用上游原版 `README.md`，不改动其主体内容。
+
 # RustDesk Guide
 
 ## Project Layout

@@ -2806,6 +2806,8 @@ pub fn main_get_common(key: String) -> String {
         return ui_interface::is_permanent_password_set().to_string();
     } else if key == "local-permanent-password-set" {
         return ui_interface::is_local_permanent_password_set().to_string();
+    } else if key == "qnap-force-update-status" {
+        return crate::qnap_update::check_and_get_status_json();
     } else {
         if key.starts_with("download-data-") {
             let id = key.replace("download-data-", "");
@@ -2848,6 +2850,9 @@ pub fn main_get_common_sync(key: String) -> SyncReturn<String> {
     // the asynchronous FFI path to avoid blocking the calling Flutter isolate.
     if key.starts_with("verified-download-url-") {
         return SyncReturn("error:unsupported".to_owned());
+    }
+    if key == "qnap-force-update-status" {
+        return SyncReturn(crate::qnap_update::cached_status_json());
     }
     SyncReturn(main_get_common(key))
 }
